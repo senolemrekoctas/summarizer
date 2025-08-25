@@ -1,23 +1,13 @@
-// summarizer_cli.mjs
-// Kullanım örnekleri:
-//   node summarizer_cli.mjs --mode extractive --ratio 0.25 --file input.txt
-//   node summarizer_cli.mjs --mode extractive --text "Uzun metin..." --max 5
-//   node summarizer_cli.mjs --mode abstractive --file input.txt --sentences 5 --model llama3.2:3b
-//   node summarizer_cli.mjs --mode abstractive --text "Uzun metin..." --model phi3:mini --sentences 4 --maxWords 70
 
 import fs from 'fs/promises';
 import path from 'path';
 
-// -----------------------------
-// Küçük Türkçe stopword listesi (istersen genişlet)
-// -----------------------------
+
 const TR_STOPWORDS = new Set([
   'acaba','ama','aslında','az','bazı','belki','biri','birkaç','birçok','böyle','bu','çok','çünkü','da','daha','de','defa','diye','eğer','en','gibi','hem','hep','hepsi','her','hiç','ile','ise','için','kadar','ki','kim','mı','mi','mu','mü','nasıl','ne','neden','nerde','nerede','nereye','niçin','niye','o','sanki','siz','şey','sonra','şu','tüm','ve','veya','ya','yani','olarak','üzere','fakat','ancak','herhangi','hiçbir','herkes','her şey','hemen','artık','yine','bile','bazen','özellikle','olsa','olduğu','olduğunu','olan','olanlar','olabilir','olmak','etmek','yapmak','var','yok','göre','kendi','kendisi','arada','aynı','bana','bende','beni','benim','biz','bizim','sizin','sizi','sizde','sana','seni','senin','onun','onlar','onları','onların','şimdi','bugün','yarın','dün','bir','iki','üç','dört','beş','altı','yedi','sekiz','dokuz','on'
 ]);
 
-// -----------------------------
-// CLI argümanları
-// -----------------------------
+
 function parseArgs(argv) {
   const out = {};
   for (let i = 2; i < argv.length; i++) {
@@ -45,9 +35,7 @@ async function readInput(args) {
   throw new Error('Metin girişi bulunamadı. --text veya --file kullanın.');
 }
 
-// -----------------------------
-// Metin yardımcıları
-// -----------------------------
+
 function splitSentences(text) {
   return text
     .replace(/\s+/g, ' ')
@@ -65,9 +53,7 @@ function tokenize(text) {
   return cleaned.split(' ').filter(w => w && w.length > 1 && !TR_STOPWORDS.has(w));
 }
 
-// -----------------------------
-// TF-IDF + Cosine + PageRank (TextRank benzeri)
-// -----------------------------
+
 function buildTfidfVectors(sentences) {
   const docs = sentences.map(tokenize);
   const vocab = new Map();
@@ -174,9 +160,6 @@ async function ollamaChat(messages, { model = 'llama3.2:3b', temperature = 0.1, 
   return data?.message?.content?.trim() ?? '';
 }
 
-// -----------------------------
-// Uzun metinleri parçala (karakter bazlı, bindirmeli)
-// -----------------------------
 function chunkText(text, maxChars = 8000, overlap = 200) {
   const chunks = [];
   let i = 0;
@@ -191,7 +174,7 @@ function chunkText(text, maxChars = 8000, overlap = 200) {
 }
 
 async function abstractiveSummarize(text, { model = 'llama3.2:3b', sentences = 5, maxWords = 80 } = {}) {
-  // 1) Parça parça özet
+
   const chunks = chunkText(text);
   const partials = [];
   for (const ch of chunks) {
@@ -205,7 +188,7 @@ async function abstractiveSummarize(text, { model = 'llama3.2:3b', sentences = 5
     partials.push(out);
   }
 
-  // 2) Birleştir & sıkılaştır (nihai paragraf)
+
   const combined = partials.join('\n');
   const sys2 = { role: 'system', content:
     'Türkçe metin özetleyicisin. Yeni bilgi ekleme, sadece verilen içerikten yararlan.' };
@@ -215,7 +198,6 @@ async function abstractiveSummarize(text, { model = 'llama3.2:3b', sentences = 5
 
   let final = await ollamaChat([sys2, usr2], { model, temperature: 0.1 });
 
-  // 3) Dil polisajı (opsiyonel ama faydalı)
   const sys3 = { role: 'system', content:
     'Türkçe metin düzelticisin. Yazım ve dil bilgisi hatalarını düzelt, daha akıcı yap. ' +
     'Anlamı değiştirme, yeni bilgi ekleme. Paragraf biçimini koru.' };
@@ -224,9 +206,7 @@ async function abstractiveSummarize(text, { model = 'llama3.2:3b', sentences = 5
   return final.trim();
 }
 
-// -----------------------------
-// Main
-// -----------------------------
+
 async function main() {
   const args = parseArgs(process.argv);
   const mode = (args.mode || '').toLowerCase();
@@ -263,3 +243,4 @@ main().catch(err => {
   console.error('[Hata]', err.message);
   process.exit(1);
 });
+ //node .\summarizer_cli.mjs --mode extractive --file .\input.txt --ratio 0.25
