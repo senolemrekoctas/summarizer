@@ -1,0 +1,6 @@
+ Ali ile Münire genç yaştan beri birbirlerine aşıktır. Münire'nin abileri İstanbul'da nam salmış belalı tiplerdir. Kız kardeşlerine göz açtırmazlar ve Ali ile görüşmesini engellemeye çalışırlar. Buna rağmen Münire ile Ali her fırsatta buluşur. Bir gün Münire'nin zengin bir talibi çıkar. Abileri, kız kardeşlerinin mutluluğunu değil sadece parayı düşündükleri için bu evliliğe onay verirler. Buna duyan Ali, Münire'nin abilerinin işlettiği sinemayı yakar ve Münire'yi kaçırır. 
+
+ İkili, günlerce yolculuk yaptıktan sonra bilmedikleri bir kasabaya gelirler. Burada hurda bir vagona yerleşirler. Kasabalılar, onların bu durumuna acır ve onlara boşta olan bir evi verirler. Ali, kasabalıların da desteğiyle evin bahçesinde meyve sebze yetiştirmeye başlar. Ancak kasabada "Müdür" lakaplı biri bahçedeki tüm meyvelerin kendisine ait olduğunu iddia eder. Bunun üzerine Ali tüm meyve ve sebzeleri toplayıp ihtiyaç sahiplerine dağıtır. 
+
+ Müdürün adamları Ali'nin peşine düşünce Münire ile birlikte kaçarlar. Yeni geldikleri kasabada çocukları olur. Adını Mustafa koyarlar. Münire, birdenbire hastalanır ve vefat eder. Artık Ali ile oğlu Mustafa baş başadır. Yeni gittikleri kasabada Ali, bir kitapçı açar. Oğlu da ona yardımcı olur. Ancak kasabadakilerin kitaba ilgisi çok azdır. Mustafa, iflas eder. Oğluyla birlikte tekrar yollara düşer. 
+node summarizer_cli.js llama3.2 3 60
